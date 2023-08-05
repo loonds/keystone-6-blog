@@ -129,7 +129,7 @@ export const lists: Lists = {
     access: allowAll,
     fields: {
       name: text({ validation: { isRequired: true } }),
-      posts: relationship({ref: 'Post.categories', many: true}),
+      posts: relationship({ref: 'Post.categories', many: true})
 
       content: document({
         formatting: true,
