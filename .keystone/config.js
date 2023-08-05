@@ -96,6 +96,18 @@ var lists = {
           inlineConnect: true,
           inlineCreate: { fields: ["name"] }
         }
+      }),
+      categories: (0, import_fields.relationship)({
+        ref: "Category.posts",
+        many: true,
+        ui: {
+          displayMode: "cards",
+          cardFields: ["name"],
+          inlineEdit: { fields: ["name"] },
+          linkToItem: true,
+          inlineConnect: true,
+          inlineCreate: { fields: ["name"] }
+        }
       })
     }
   }),
@@ -112,7 +124,8 @@ var lists = {
   Category: (0, import_core.list)({
     access: import_access.allowAll,
     fields: {
-      title: (0, import_fields.text)({ validation: { isRequired: true } }),
+      name: (0, import_fields.text)({ validation: { isRequired: true } }),
+      posts: (0, import_fields.relationship)({ ref: "Post.categories", many: true }),
       content: (0, import_fields_document.document)({
         formatting: true,
         layouts: [

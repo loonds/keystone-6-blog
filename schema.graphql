@@ -141,6 +141,8 @@ type Post {
   author: User
   tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
   tagsCount(where: TagWhereInput! = {}): Int
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
 }
 
 type Post_content_Document {
@@ -159,12 +161,19 @@ input PostWhereInput {
   title: StringFilter
   author: UserWhereInput
   tags: TagManyRelationFilter
+  categories: CategoryManyRelationFilter
 }
 
 input TagManyRelationFilter {
   every: TagWhereInput
   some: TagWhereInput
   none: TagWhereInput
+}
+
+input CategoryManyRelationFilter {
+  every: CategoryWhereInput
+  some: CategoryWhereInput
+  none: CategoryWhereInput
 }
 
 input PostOrderByInput {
@@ -177,6 +186,7 @@ input PostUpdateInput {
   content: JSON
   author: UserRelateToOneForUpdateInput
   tags: TagRelateToManyForUpdateInput
+  categories: CategoryRelateToManyForUpdateInput
 }
 
 input UserRelateToOneForUpdateInput {
@@ -192,6 +202,13 @@ input TagRelateToManyForUpdateInput {
   connect: [TagWhereUniqueInput!]
 }
 
+input CategoryRelateToManyForUpdateInput {
+  disconnect: [CategoryWhereUniqueInput!]
+  set: [CategoryWhereUniqueInput!]
+  create: [CategoryCreateInput!]
+  connect: [CategoryWhereUniqueInput!]
+}
+
 input PostUpdateArgs {
   where: PostWhereUniqueInput!
   data: PostUpdateInput!
@@ -202,6 +219,7 @@ input PostCreateInput {
   content: JSON
   author: UserRelateToOneForCreateInput
   tags: TagRelateToManyForCreateInput
+  categories: CategoryRelateToManyForCreateInput
 }
 
 input UserRelateToOneForCreateInput {
@@ -212,6 +230,11 @@ input UserRelateToOneForCreateInput {
 input TagRelateToManyForCreateInput {
   create: [TagCreateInput!]
   connect: [TagWhereUniqueInput!]
+}
+
+input CategoryRelateToManyForCreateInput {
+  create: [CategoryCreateInput!]
+  connect: [CategoryWhereUniqueInput!]
 }
 
 type Tag {
@@ -256,7 +279,9 @@ input TagCreateInput {
 
 type Category {
   id: ID!
-  title: String
+  name: String
+  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
+  postsCount(where: PostWhereInput! = {}): Int
   content: Category_content_Document
 }
 
@@ -273,16 +298,18 @@ input CategoryWhereInput {
   OR: [CategoryWhereInput!]
   NOT: [CategoryWhereInput!]
   id: IDFilter
-  title: StringFilter
+  name: StringFilter
+  posts: PostManyRelationFilter
 }
 
 input CategoryOrderByInput {
   id: OrderDirection
-  title: OrderDirection
+  name: OrderDirection
 }
 
 input CategoryUpdateInput {
-  title: String
+  name: String
+  posts: PostRelateToManyForUpdateInput
   content: JSON
 }
 
@@ -292,7 +319,8 @@ input CategoryUpdateArgs {
 }
 
 input CategoryCreateInput {
-  title: String
+  name: String
+  posts: PostRelateToManyForCreateInput
   content: JSON
 }
 
